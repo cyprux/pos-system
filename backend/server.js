@@ -3,7 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const routes = require("./routes/TaskRoute");
+const itemRoutes = require("./routes/ItemRoute");
+const transactionRoutes = require("./routes/TransactionRoute");
 
 const cors = require("cors");
 
@@ -18,6 +19,7 @@ mongoose
   .then(() => console.log("MongoDB Connected..."))
   .catch((err) => console.log(err));
 
-app.use("/api", routes);
+app.use("/api", itemRoutes);
+app.use("/api", transactionRoutes);
 
 app.listen(PORT, () => console.log(`Listening at ${PORT}`));
