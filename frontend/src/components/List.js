@@ -1,11 +1,11 @@
 import React from "react";
 import { BsTrash } from "react-icons/bs";
 import { BiEditAlt } from "react-icons/bi";
-import axios from "axios";
 import { baseURL } from "../utils/constant";
+import axios from "axios";
 
-const List = ({ id, task, setUpdateUI, updateMode }) => {
-  const removeTask = () => {
+const List = ({ id, itemName, qty, setUpdateUI, updateMode }) => {
+  const removeItem = () => {
     axios.delete(`${baseURL}/delete/${id}`).then((res) => {
       console.log(res);
       setUpdateUI((prevState) => !prevState);
@@ -14,10 +14,11 @@ const List = ({ id, task, setUpdateUI, updateMode }) => {
 
   return (
     <li>
-      {task}
+      <div>{itemName}</div>
+      <div>{qty}</div>
       <div className="icon_holder">
-        <BiEditAlt className="icon" onClick={() => updateMode(id, task)} />
-        <BsTrash className="icon" onClick={removeTask} />
+        <BiEditAlt className="icon" onClick={() => updateMode(id, qty)} />
+        <BsTrash className="icon" onClick={removeItem} />
       </div>
     </li>
   );
