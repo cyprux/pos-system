@@ -42,11 +42,21 @@ li {
 
 .icon_holder {
   display: flex;
-  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+
 }
 
 .icon {
   cursor: pointer;
+}
+
+.currency-input {
+  padding-left: 20px; /* Add space for the "$" symbol */
+  background-image:  url("C:\Users\jtyt3\Documents\Github\pos-system\frontend\src\assets\dollarSign.png"); /* Replace 'dollar-sign.png' with your image URL or use 'content' for text */
+  background-repeat: no-repeat;
+  background-position: 2% 45%; /* Adjust the position as needed */
+  background-size: 17px; /* Adjust the size of the image or text */
 }
 
 /* Apply styles to the entire table */

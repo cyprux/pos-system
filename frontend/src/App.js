@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import List from "./components/List";
-import Table from "./components/Table";
 import axios from "axios";
 import { baseURL } from "./utils/constant";
+import Table from "./components/Table";
 import Select from "react-select";
 
 const App = () => {
@@ -36,41 +35,54 @@ const App = () => {
       });
   };
 
-  const updateMode = (id, text) => {
-    console.log(text);
-    setQtys(text);
-    setUpdateId(id);
+  const updateFruitTable = () => {
+    const updatedItems = fruitTableValue.map((item) => {
+      if (item._id === updateId) {
+        return { ...item, quantity: qtys };
+      }
+      return item;
+    });
+
+    setFruitTableValue(updatedItems);
+    setUnitPrice("");
+    setQtys("");
+    setSelectedFruitOptions("");
+    setUpdateId(null);
   };
 
   const handleFruitSelect = (data) => {
     setSelectedFruitOptions(data);
     const selectedFruit = items.find((item) => item.itemName === data.value);
     if (selectedFruit) {
-      setUnitPrice(Number(selectedFruit.unitPrice));
+      setUnitPrice(Number(selectedFruit.unitPrice).toFixed(2));
     } else {
       setUnitPrice(0);
     }
   };
 
   const addFruitTable = () => {
-    const selectedFruit = items.find(
-      (item) => item.itemName === selectedFruitOptions.value
-    );
+    if (qtys !== "" && fruitOptions !== [] && unitPrice !== "") {
+      const selectedFruit = items.find(
+        (item) => item.itemName === selectedFruitOptions.value
+      );
 
-    setFruitTableValue([
-      ...fruitTableValue,
-      {
-        _id: selectedFruit._id,
-        itemName: selectedFruit.itemName,
-        quantity: qtys,
-        unitPrice: selectedFruit.unitPrice,
-      },
-    ]);
+      setFruitTableValue([
+        ...fruitTableValue,
+        {
+          _id: selectedFruit._id,
+          itemName: selectedFruit.itemName,
+          quantity: qtys,
+          unitPrice: selectedFruit.unitPrice,
+        },
+      ]);
 
-    setUpdateUI((prevState) => !prevState);
-    setUnitPrice("");
-    setQtys("");
-    setSelectedFruitOptions("");
+      setUpdateUI((prevState) => !prevState);
+      setUnitPrice("");
+      setQtys("");
+      setSelectedFruitOptions("");
+    } else {
+      alert("Please Ensure ALL Fields are Filled!");
+    }
   };
 
   const removeDuplicateItemName = () => {
@@ -92,9 +104,18 @@ const App = () => {
   };
 
   const addFruitTransaction = () => {
-    reduceFruitQuantity();
-    saveTransaction();
+    if (fruitTableValue.length > 0) {
+      reduceFruitQuantity();
+      saveTransaction();
+    } else {
+      alert("Please Ensure You Have At Least 1 Line Item!");
+    }
   };
+
+  const totalAmount = fruitTableValue.reduce((accumulator, item) => {
+    const itemCost = item.quantity * item.unitPrice;
+    return accumulator + itemCost;
+  }, 0);
 
   const saveTransaction = () => {
     axios
@@ -155,6 +176,7 @@ const App = () => {
 
         <input
           type="number"
+          className="currency-input"
           value={unitPrice}
           placeholder="Unit Price"
           readOnly
@@ -169,30 +191,31 @@ const App = () => {
           Remove All Item
         </button>
 
-        <button type="submit" onClick={addFruitTable}>
-          Add Item
-        </button>
-
-        {/* <button type="submit" onClick={updateId ? updateItem : addItem}>
+        <button
+          type="submit"
+          onClick={updateId ? updateFruitTable : addFruitTable}
+        >
           {updateId ? "Update Item" : "Add Item"}
-        </button> */}
+        </button>
       </div>
       <div className="input_holder">
-        {/* <ul>
-          {items.map((test) => (
-            <List
-              key={test._id}
-              id={test._id}
-              itemName={test.itemName}
-              qty={test.quantity}
-              setUpdateUI={setUpdateUI}
-              //updateMode={updateMode}
-            />
-          ))}
-        </ul> */}
-        <Table data={fruitTableValue} />
+        <Table
+          data={fruitTableValue}
+          setFruitTableValue={setFruitTableValue}
+          setSelectedFruitOptions={setSelectedFruitOptions}
+          setQtys={setQtys}
+          setUnitPrice={setUnitPrice}
+          setUpdateId={setUpdateId}
+        />
       </div>
       <div className="input_holder">
+        <input
+          type="number"
+          className="currency-input"
+          value={totalAmount.toFixed(2) <= 0 ? "" : totalAmount.toFixed(2)}
+          placeholder="Total Amount"
+          readOnly
+        />
         <button type="submit" onClick={addFruitTransaction}>
           Add Tranasction
         </button>
