@@ -27,6 +27,7 @@ const Table = ({
           <th>Item Name</th>
           <th>Quantity</th>
           <th>Unit Price</th>
+          <th>Total Cost Per L/I</th>
         </tr>
       </thead>
       <tbody>
@@ -35,6 +36,7 @@ const Table = ({
             <td>{item.itemName}</td>
             <td>{item.quantity}</td>
             <td>$ {item.unitPrice.toFixed(2)}</td>
+            <td>$ {(item.quantity * item.unitPrice).toFixed(2)}</td>
             <td>
               <BiEditAlt
                 className="icon"
