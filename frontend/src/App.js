@@ -65,7 +65,7 @@ const App = () => {
   };
 
   const addFruitTable = () => {
-    if (qtys !== "" && fruitOptions !== [] && unitPrice !== "") {
+    if (qtys !== "" && fruitOptions.length !== 0 && unitPrice !== "") {
       const selectedFruit = items.find(
         (item) => item.itemName === selectedFruitOptions.value
       );
