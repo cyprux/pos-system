@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { baseURL } from "./utils/constant";
-import Table from "./components/Table";
+import Table from "./components/ItemTable";
+import MainNavbar from "./components/MainNavbar";
 import Select from "react-select";
+import { InputGroup, Row, Col, Form, Button, Container } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import ItemTable from "./components/ItemTable";
 
 const App = () => {
   const [qtys, setQtys] = useState("");
@@ -23,11 +27,11 @@ const App = () => {
     axios
       .get(`${baseURL}/getItem`)
       .then((res) => {
-        setItems(res.data);
         const fetchedOptions = res.data.map((item) => ({
           value: item.itemName,
           label: item.itemName,
         }));
+        setItems(res.data);
         setFruitOptions(fetchedOptions);
       })
       .catch((error) => {
@@ -50,9 +54,9 @@ const App = () => {
     setUpdateId(null);
   };
 
-  const handleFruitSelect = (data) => {
-    setSelectedFruitOptions(data);
-    const selectedFruit = items.find((item) => item.itemName === data.value);
+  const handleFruitSelect = (event) => {
+    setSelectedFruitOptions(event);
+    const selectedFruit = items.find((item) => item.itemName === event.value);
     if (selectedFruit) {
       setUnitPrice(Number(selectedFruit.unitPrice).toFixed(2));
     } else {
@@ -156,70 +160,109 @@ const App = () => {
 
   return (
     <main>
-      <h1 className="title">Point of Sales System</h1>
+      <MainNavbar />
+      <Container>
+        <Row>
+          <Col xs={4}>
+            <Form.Group className="mb-4"></Form.Group>
+            <Form.Group className="mb-4">
+              <Select
+                options={fruitOptions}
+                placeholder="Item Name"
+                value={selectedFruitOptions}
+                onChange={handleFruitSelect}
+              />
+            </Form.Group>
+            <Form.Group className="mb-4">
+              <Form.Control
+                type="number"
+                min="1"
+                value={qtys}
+                placeholder="Quantity"
+                onChange={(e) => setQtys(Number(e.target.value))}
+              />
+            </Form.Group>
+            <Form.Group className="mb-4">
+              <InputGroup>
+                <InputGroup.Text id="basic-addon1">$</InputGroup.Text>
+                <Form.Control
+                  type="number"
+                  value={unitPrice}
+                  placeholder="Unit Price"
+                  readOnly
+                />
+              </InputGroup>
+            </Form.Group>
+            <Form.Group className="mb-4">
+              <Button
+                variant="success"
+                className="submitButton"
+                type="submit"
+                onClick={updateId ? updateFruitTable : addFruitTable}
+              >
+                {updateId ? "Update Item" : "Add Item"}
+              </Button>
+            </Form.Group>
+          </Col>
+          <Col></Col>
+          <Col xs={7}>
+            <Row>
+              <Form.Group className="mb-4"></Form.Group>
+              <ItemTable
+                data={fruitTableValue}
+                setFruitTableValue={setFruitTableValue}
+                setSelectedFruitOptions={setSelectedFruitOptions}
+                setQtys={setQtys}
+                setUnitPrice={setUnitPrice}
+                setUpdateId={setUpdateId}
+              />
+            </Row>
+            <Row>
+              <Col>
+                <Form.Group className="mb-4"> </Form.Group>
+                <Button
+                  variant="danger"
+                  type="submit"
+                  onClick={() => {
+                    setFruitTableValue([]);
+                  }}
+                >
+                  Remove All Items
+                </Button>
+              </Col>
+              <Col></Col>
+              <Col>
+                <Form.Group className="mb-4"></Form.Group>
+                <InputGroup>
+                  <InputGroup.Text id="basic-addon1">$</InputGroup.Text>
+                  <Form.Control
+                    type="number"
+                    className="currency-input"
+                    value={
+                      totalAmount.toFixed(2) <= 0 ? "" : totalAmount.toFixed(2)
+                    }
+                    placeholder="Total Amount"
+                    readOnly
+                  />
+                </InputGroup>
+              </Col>
+              <Col>
+                <Form.Group className="mb-4"></Form.Group>
+                <Button
+                  variant="success"
+                  className="submitButton"
+                  type="submit"
+                  onClick={addFruitTransaction}
+                >
+                  Add Tranasction
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
 
-      <div className="input_holder">
-        <Select
-          options={fruitOptions}
-          placeholder="Item Name"
-          value={selectedFruitOptions}
-          onChange={handleFruitSelect}
-        />
-
-        <input
-          type="number"
-          min="1"
-          value={qtys}
-          placeholder="Quantity"
-          onChange={(e) => setQtys(Number(e.target.value))}
-        />
-
-        <input
-          type="number"
-          className="currency-input"
-          value={unitPrice}
-          placeholder="Unit Price"
-          readOnly
-        />
-
-        <button
-          type="submit"
-          onClick={() => {
-            setFruitTableValue([]);
-          }}
-        >
-          Remove All Item
-        </button>
-
-        <button
-          type="submit"
-          onClick={updateId ? updateFruitTable : addFruitTable}
-        >
-          {updateId ? "Update Item" : "Add Item"}
-        </button>
-      </div>
-      <div className="input_holder">
-        <Table
-          data={fruitTableValue}
-          setFruitTableValue={setFruitTableValue}
-          setSelectedFruitOptions={setSelectedFruitOptions}
-          setQtys={setQtys}
-          setUnitPrice={setUnitPrice}
-          setUpdateId={setUpdateId}
-        />
-      </div>
-      <div className="input_holder">
-        <input
-          type="number"
-          className="currency-input"
-          value={totalAmount.toFixed(2) <= 0 ? "" : totalAmount.toFixed(2)}
-          placeholder="Total Amount"
-          readOnly
-        />
-        <button type="submit" onClick={addFruitTransaction}>
-          Add Tranasction
-        </button>
-      </div>
+      <div></div>
     </main>
   );
 };

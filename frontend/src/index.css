@@ -5,68 +5,23 @@
   font-family: "Roboto", sans-serif;
 }
 
-main {
-  max-width: fit-content;
-  margin: 0 auto;
-}
-
-.title {
-  text-align: center;
-  padding-top: 30px;
-}
-
-.input_holder {
-  padding-top: 30px;
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-}
-
-input,
-button {
-  padding: 10px;
-}
-
-ul {
-  list-style: none;
-  margin-top: 20px;
-}
-
-li {
-  background-color: rgb(216, 216, 216);
-  padding: 15px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
 .icon_holder {
   display: flex;
   margin-top: 10px;
   justify-content: center;
-
 }
 
 .icon {
   cursor: pointer;
 }
 
-.currency-input {
-  padding-left: 20px; /* Add space for the "$" symbol */
-  background-image:  url("C:\Users\jtyt3\Documents\Github\pos-system\frontend\src\assets\dollarSign.png"); /* Replace 'dollar-sign.png' with your image URL or use 'content' for text */
-  background-repeat: no-repeat;
-  background-position: 2% 45%; /* Adjust the position as needed */
-  background-size: 17px; /* Adjust the size of the image or text */
-}
-
-/* Apply styles to the entire table */
-table {
+/* table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
 }
 
-/* Style table headers */
+
 th {
   background-color: #f2f2f2;
   text-align: center;
@@ -74,7 +29,7 @@ th {
   border: 1px solid #ddd;
 }
 
-/* Style table rows */
+
 tr:nth-child(even) {
   background-color: #f2f2f2;
 }
@@ -83,14 +38,30 @@ tr:nth-child(odd) {
   background-color: #fff;
 }
 
-/* Style table cells (td) */
 td {
   padding: 10px;
   border: 1px solid #ddd;
   text-align: center;
 }
 
-/* Add hover effect to rows */
+
 tr:hover {
   background-color: #e0e0e0;
+} */
+
+thead {
+  text-align: center;
+}
+
+td {
+  text-align: center;
+}
+
+.submitButton{
+  float: right;
+  background-color: #39bccc;
+}
+
+.navbar-header {
+  background-color: #39bccc;
 }

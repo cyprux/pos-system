@@ -1,8 +1,10 @@
 import React from "react";
 import { BsTrash } from "react-icons/bs";
 import { BiEditAlt } from "react-icons/bi";
+import { Table } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-const Table = ({
+const ItemTable = ({
   data,
   setFruitTableValue,
   setSelectedFruitOptions,
@@ -21,13 +23,15 @@ const Table = ({
     setUpdateId(id);
   };
   return (
-    <table>
+    <Table striped hover>
       <thead>
         <tr>
           <th>Item Name</th>
           <th>Quantity</th>
           <th>Unit Price</th>
           <th>Total Cost Per L/I</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -56,8 +60,8 @@ const Table = ({
           </tr>
         ))}
       </tbody>
-    </table>
+    </Table>
   );
 };
 
-export default Table;
+export default ItemTable;
