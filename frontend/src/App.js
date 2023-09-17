@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { baseURL } from "./utils/constant";
-import Table from "./components/ItemTable";
 import MainNavbar from "./components/MainNavbar";
 import Select from "react-select";
 import { InputGroup, Row, Col, Form, Button, Container } from "react-bootstrap";
@@ -48,10 +47,7 @@ const App = () => {
     });
 
     setFruitTableValue(updatedItems);
-    setUnitPrice("");
-    setQtys("");
-    setSelectedFruitOptions("");
-    setUpdateId(null);
+    resetForm();
   };
 
   const handleFruitSelect = (event) => {
@@ -81,11 +77,9 @@ const App = () => {
       ]);
 
       setUpdateUI((prevState) => !prevState);
-      setUnitPrice("");
-      setQtys("");
-      setSelectedFruitOptions("");
+      resetForm();
     } else {
-      alert("Please Ensure ALL Fields are Filled!");
+      alert("Please Ensure ALL Fields are Filled Correctly!");
     }
   };
 
@@ -111,6 +105,7 @@ const App = () => {
     if (fruitTableValue.length > 0) {
       reduceFruitQuantity();
       saveTransaction();
+      alert("Transaction is Successful!");
     } else {
       alert("Please Ensure You Have At Least 1 Line Item!");
     }
@@ -120,6 +115,13 @@ const App = () => {
     const itemCost = item.quantity * item.unitPrice;
     return accumulator + itemCost;
   }, 0);
+
+  const resetForm = () => {
+    setUnitPrice("");
+    setQtys("");
+    setSelectedFruitOptions("");
+    setUpdateId(null);
+  };
 
   const saveTransaction = () => {
     axios
@@ -187,7 +189,9 @@ const App = () => {
                 <InputGroup.Text id="basic-addon1">$</InputGroup.Text>
                 <Form.Control
                   type="number"
-                  value={unitPrice}
+                  value={
+                    unitPrice !== "" ? Number(unitPrice).toFixed(2) : unitPrice
+                  }
                   placeholder="Unit Price"
                   readOnly
                 />
@@ -254,14 +258,13 @@ const App = () => {
                   type="submit"
                   onClick={addFruitTransaction}
                 >
-                  Add Tranasction
+                  Add Transaction
                 </Button>
               </Col>
             </Row>
           </Col>
         </Row>
       </Container>
-
       <div></div>
     </main>
   );
